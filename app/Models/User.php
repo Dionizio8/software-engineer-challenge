@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\FullTextSearch;
 
 class User extends Model
 {
+
+    use FullTextSearch;
 
     /**
      * The attributes that are mass assignable.
@@ -28,5 +31,13 @@ class User extends Model
         'id',
         'created_at',
         'updated_at',
+    ];
+
+    /**
+     * The columns of the full text index
+     */
+    protected $searchable = [
+        'name',
+        'username',
     ];
 }
