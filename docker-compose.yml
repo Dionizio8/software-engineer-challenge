@@ -12,7 +12,8 @@ services:
       MYSQL_DATABASE: challenge-db
       MYSQL_USER: challenge-user
       MYSQL_PASSWORD: challenge-pass
-
+    volumes:
+      - .images/mysql/testing-db.sql:/docker-entrypoint-initdb.d/testing-db.sql
 
   nginx:
     container_name: challenge-nginx

@@ -11,6 +11,9 @@
     </testsuites>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <env name="DB_DATABASE" value="challenge-db-testing"/>
+        <env name="DB_PASSWORD" value="root"/>
+        <env name="DB_USERNAME" value="root"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
     </php>
