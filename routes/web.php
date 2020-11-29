@@ -14,7 +14,7 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return "Software Engineer Challenge 2020 - Gabriel Dionizio Pereira.";
 });
 
 
