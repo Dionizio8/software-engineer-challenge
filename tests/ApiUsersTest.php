@@ -14,6 +14,10 @@ class ApiUsersTest extends TestCase
         ]);
 
         User::factory()->create([
+            'username' => 'gabriel.dionizio',
+        ]);
+
+        User::factory()->create([
             'name' => 'Ana Maria',
         ]);
 
@@ -23,7 +27,7 @@ class ApiUsersTest extends TestCase
 
         $this->get("users?search=Gabriel Dionizio");
         $this->seeStatusCode(200)
-            ->seeJson(['total' => 1])
+            ->seeJson(['total' => 2])
             ->seeJsonStructure(
                 [
                     'current_page',
