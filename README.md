@@ -1,34 +1,87 @@
-![PicPay](https://user-images.githubusercontent.com/1765696/26998603-711fcf30-4d5c-11e7-9281-0d9eb20337ad.png)
+# Teste Backend PicPay
 
-# Teste Backend
+O projeto tem como objetivo cumprir o desafio proposto pela equipe técnica da **PicPay**.
 
-O desafio é criar uma API REST que busca usuarios pelo nome e username a partir de uma palavra chave. Faça o download do arquivo [users.csv.gz](https://s3.amazonaws.com/careers-picpay/users.csv.gz) que contém o banco de dados que deve ser usado na busca. Ele contém os IDs, nomes e usernames dos usuários.
+---
 
-###### Exemplo
-| ID                                   | Nome              | Username             |
-|--------------------------------------|-------------------|----------------------|
-| 065d8403-8a8f-484d-b602-9138ff7dedcf | Wadson marcia     | wadson.marcia        |
-| 5761be9e-3e27-4be8-87bc-5455db08408  | Kylton Saura      | kylton.saura         |
-| ef735189-105d-4784-8e2d-c8abb07e72d3 | Edmundo Cassemiro | edmundo.cassemiro    |
-| aaa40f4e-da26-42ee-b707-cb81e00610d5 | Raimundira M      | raimundiram          |
-| 51ba0961-8d5b-47be-bcb4-54633a567a99 | Pricila Kilder    | pricilakilderitaliani|
+## Configurações iniciais
 
+Para dar continuidade na instalação do projeto, é necessário as seguinte ferramentas instaladas :
 
+* Docker ***(recomendado versão >= 19)***
+* Docker Compose
+  
 
-Também são fornecidas duas listas de usuários que devem ser utilizadas para priorizar os resultados da busca. A lista 1 tem mais prioridade que a lista 2. Ou seja, se dois usuarios casam com os criterios de busca, aquele que está na lista 1 deverá ser exibido primeiro em relação àquele que está na lista 2. Os que não estão em nenhuma das listas são exibidos em seguida.
+*No terminal acesse a pasta do projeto e execute os seguintes comandos :*
 
-As listas podem ser encontradas na raiz deste repositório ([lista_relevancia_1.txt](lista_relevancia_1.txt) e [lista_relevancia_2.txt](lista_relevancia_2.txt)).
-Os resultados devem ser retornados paginados de 15 em 15 registros.
+### Inicializando os containers
+```bash
+docker-compose up -d
+```
 
-Utilize ***Docker*** e escolha as tecnologias que você vai usar e tente montar uma solução completa para rodar a aplicação.
+### Copiando arquivo de configuração 
+```bash
+cp .env.example .env
+```
 
-Faça um ***Fork*** deste repositório e abra um ***Pull Request***, **com seu nome na descrição**, para participar. 
+### Instalando as dependências do projeto com composer
+```bash
+docker exec -it challenge-php composer install
+```
 
------
+### Executando as migrations
+```bash
+docker exec -it challenge-php php artisan migrate
+```
 
-### Diferenciais
+Portas utilizadas:
+- [:7700] : nginx (PHP 7.4)
+- [:3306] : Mysql (5.7)
 
-- Criar uma solução de autenticação entre o frontend e o backend;
-- Ter um desempenho elevado num conjunto de dados muito grande;
-- Criar testes automatizados;
-- Seja Cloud native;
+---
+
+## Importações de dados
+
+### Usuários 
+
+Salve o arquivo [users.csv](https://s3.amazonaws.com/careers-picpay/users.csv.gz) (**necessário extrair**) na raiz do projeto e execute o seguinte comando no terminal :
+```bash
+docker exec -it challenge-php php artisan upload:users-csv users.csv
+```
+
+### Relevância
+
+Salve os arquivos [lista_relevancia_1.txt](https://s3.amazonaws.com/careers-picpay/lista_relevancia_1.txt) e [lista_relevancia_2.txt](https://s3.amazonaws.com/careers-picpay/lista_relevancia_2.txt) na raiz do projeto e execute os seguintes comandos no terminal :
+
+```bash
+docker exec -it challenge-php php artisan upload:users-relevance-csv lista_relevancia_2.txt 1
+```
+
+```bash
+docker exec -it challenge-php php artisan upload:users-relevance-csv lista_relevancia_1.txt 2
+```
+
+* *Obs: O segundo parâmetro do comando **upload:users-relevance-csv** indica o nível de prioridade, quanto maior ele for mais prioritário na busca ele vai ser.*
+
+---
+## Testes
+
+A aplicação contempla um conjunto de testes para validar a integridade e disponibilidade dos recursos oferecidos, para executá-los basta realizar o seguinte comando :
+```bash
+docker exec -it challenge-php ./vendor/bin/phpunit
+```
+* *Obs: Os testes são executados em um banco de dados separado para não comprometer a aplicação e a integridade dos dados.*
+---
+
+## API
+
+Endpoint: http://localhost:7700/users
+
+Parâmetros:
+* [GET] **search**: Palavra chave para realizar a busca. 
+* [GET] **page**: Paginação de resultados.
+
+**(exemplo)** http://localhost:7700/users?search=lucas&page=2
+
+---
+
