@@ -40,7 +40,7 @@ Portas utilizadas:
 
 ---
 
-## Importações de dados
+## Importação de dados
 
 ### Usuários 
 
@@ -75,7 +75,7 @@ docker exec -it challenge-php ./vendor/bin/phpunit
 
 ## API
 
-Endpoint: http://localhost:7700/users
+A API estará disponibilizada em http://localhost:7700/users
 
 Parâmetros:
 * [GET] **search**: Palavra chave para realizar a busca. 
